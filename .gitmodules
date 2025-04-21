@@ -1,0 +1,3 @@
+[submodule "libs/libev"]
+	path = libs/libev
+	url = git@github.com:ar7ch/libev.git
