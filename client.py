@@ -60,7 +60,7 @@ async def handle_input(writer: StreamWriter) -> None:
             line = await loop.run_in_executor(None, sys.stdin.readline)
             if not line:  # Ctrl+D
                 break
-            writer.write(line.encode())
+            writer.write(line.encode().strip())
             await writer.drain()
         except (EOFError, KeyboardInterrupt):
             break
