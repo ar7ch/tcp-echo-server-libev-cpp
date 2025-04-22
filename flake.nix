@@ -47,6 +47,7 @@
                   m4
                   autoconf-archive
                   libtool
+                  python314
                 ];
               };
           shellHook = ''
