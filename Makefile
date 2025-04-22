@@ -9,7 +9,7 @@ clean:
 
 build:
 	mkdir -p $(PROJECT_BUILD_DIR)
-	cmake -B $(PROJECT_BUILD_DIR) . -DCMAKE_INCLUDE_PATH=""
+	cmake -B $(PROJECT_BUILD_DIR) .
 	cmake --build $(PROJECT_BUILD_DIR)
 	cp $(PROJECT_BUILD_DIR)/compile_commands.json .
 

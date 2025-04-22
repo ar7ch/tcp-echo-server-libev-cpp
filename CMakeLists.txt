@@ -11,8 +11,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 # generate compile_commands.json
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# include_directories(${CMAKE_INCLUDE_PATH})
-
 # Source files
 set(SOURCES
 	src/main.cpp
@@ -38,6 +36,4 @@ FetchContent_MakeAvailable(CLI11)
 # add executable
 add_executable(${PROJECT_NAME} ${SOURCES})
 
-target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE ${CMAKE_SOURCE_DIR}/libs/libev)
-target_link_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/libs/libev/.libs)
 target_link_libraries(${PROJECT_NAME} PUBLIC  CLI11::CLI11 spdlog::spdlog ev)
