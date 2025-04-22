@@ -13,8 +13,10 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Source files
 set(SOURCES
-	src/main.cpp
+	${CMAKE_SOURCE_DIR}/src/main.cpp
+	${CMAKE_SOURCE_DIR}/src/util.cpp
 )
+include_directories(${CMAKE_SOURCE_DIR}/src)
 
 include(FetchContent)
 # spdlog
@@ -35,5 +37,4 @@ FetchContent_MakeAvailable(CLI11)
 
 # add executable
 add_executable(${PROJECT_NAME} ${SOURCES})
-
 target_link_libraries(${PROJECT_NAME} PUBLIC  CLI11::CLI11 spdlog::spdlog ev)
