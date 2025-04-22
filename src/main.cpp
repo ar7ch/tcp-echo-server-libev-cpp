@@ -1,3 +1,5 @@
+#include "CLI/CLI.hpp"
+#include <CLI/CLI.hpp>
 #include <arpa/inet.h>
 #include <errno.h>
 #include <ev++.h>
@@ -58,8 +60,8 @@ public:
     char buffer[BUFFER_SIZE];
     ssize_t n_bytes = ::read(_fd, buffer, sizeof(buffer));
     if (n_bytes <= 0) {
-      spdlog::debug("Client {}:{}: connection reset, closing...",
-                    _ip_port.first, _ip_port.second);
+      spdlog::info("Client {}:{}: connection reset, closing...", _ip_port.first,
+                   _ip_port.second);
       _on_disconnect_cb();
       return;
     }
@@ -125,7 +127,7 @@ public:
 
     _accept_watcher.set<Server, &Server::on_accept>(this);
     _accept_watcher.start(_listen_socket_fd, ev::READ);
-    spdlog::info("Server is listening on port port {}", port);
+    spdlog::info("Server is listening on port {}", port);
   }
 
   ~Server() {
@@ -159,17 +161,22 @@ void handle_sigint(ev::sig &sig, int revents) {
 }
 
 int main(int argc, char **argv) {
+  CLI::App app{"TCP echo server"};
   spdlog::set_pattern("[%H:%M:%S.%e][%^%l%$] %v");
-  spdlog::set_level(spdlog::level::debug);
+  spdlog::set_level(spdlog::level::info);
+
   int port;
-  try {
-    if (argc != 2) {
-      throw std::invalid_argument("Expected 1 positional port argument");
-    }
-    port = std::stoi(argv[1]);
-  } catch (std::invalid_argument &e) {
-    spdlog::error("Usage: {} <port 1-65535>", argv[0]);
-    return EXIT_FAILURE;
+  app.add_option("port", port, "Port number to listen on")
+      ->required()
+      ->check(CLI::Range(1, 65535));
+  bool verbose = false;
+  app.add_flag("-v,--verbose", verbose, "Enable verbose logging");
+
+  CLI11_PARSE(app, argc, argv);
+
+  if (verbose) {
+    spdlog::set_level(spdlog::level::debug);
+    spdlog::debug("Verbose mode");
   }
 
   try {
