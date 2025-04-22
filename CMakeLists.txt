@@ -12,12 +12,12 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # warn if ${CMAKE_INCLUDE_PATH} is not set
-if(NOT DEFINED CMAKE_INCLUDE_PATH)
-	message(WARNING "CMAKE_INCLUDE_PATH is not set")
-endif()
+# if(NOT DEFINED CMAKE_INCLUDE_PATH)
+# 	message(WARNING "CMAKE_INCLUDE_PATH is not set")
+# endif()
 
 # include directories
-include_directories(${CMAKE_INCLUDE_PATH})
+# include_directories(${CMAKE_INCLUDE_PATH})
 
 # Source files
 set(SOURCES
@@ -30,13 +30,11 @@ FetchContent_Declare(
 						GIT_REPOSITORY https://github.com/gabime/spdlog.git
 						GIT_TAG v1.15.2
 )
-# Download spdlog
+# download and import spdlog
 FetchContent_MakeAvailable(spdlog)
-
-# Import spdlog.
-add_subdirectory(${spdlog_SOURCE_DIR})
-
 # add executable
 add_executable(${PROJECT_NAME} ${SOURCES})
 
-
+target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE ${CMAKE_SOURCE_DIR}/libs/libev)
+target_link_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/libs/libev/.libs)
+target_link_libraries(${PROJECT_NAME} PUBLIC spdlog::spdlog ev)
