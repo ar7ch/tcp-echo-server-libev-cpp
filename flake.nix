@@ -42,10 +42,16 @@
                   pkg-config
                   libev
                   bear
+                  autoconf
+                  automake
+                  m4
+                  autoconf-archive
+                  libtool
                 ];
               };
           shellHook = ''
             echo "Loading dev flake..."
+            export LIBEV_PATH=${pkgs.libev}
             # export CMAKE_INCLUDE_PATH+=$NIX_CFLAGS_COMPILE
             echo "Dev flake loaded"
           '';
