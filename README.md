@@ -1,4 +1,5 @@
 # TCP echo server
+[![Build and Push Docker Image](https://github.com/ar7ch/tcp-echo-server-libev-cpp/actions/workflows/docker-build.yml/badge.svg)](https://github.com/ar7ch/tcp-echo-server-libev-cpp/actions/workflows/docker-build.yml)
 
 Async libev-based TCP server that simply echoes everything that clients send.
 
@@ -30,7 +31,11 @@ make build
     (default listening port is 5000, don't forget about port forwarding)
 
 **Option 2**:
-1. use CI-built docker image on DockerHub: ar7ch:tcp-echo-server
+1. use CI-built docker image on DockerHub: (https://hub.docker.com/r/ar7ch/tcp-echo-server)[ar7ch/tcp-echo-server]
+
+```bash
+docker run -it ar7ch/tcp-echo-server
+```
 
 ## Run
 
