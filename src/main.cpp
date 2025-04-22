@@ -96,15 +96,15 @@ private:
 public:
   Server(int port, ev::loop_ref &loop)
       : _port{port}, _loop{loop}, _accept_watcher{_loop} {
-    int socket_fd = ::socket(AF_INET, SOCK_STREAM, 0);
-    if (socket_fd < 0) {
+    _listen_socket_fd = ::socket(AF_INET, SOCK_STREAM, 0);
+    if (_listen_socket_fd < 0) {
       throw std::runtime_error(
           fmt::format("socket() failed: {}", strerror(errno)));
     }
 
     int opt = 1;
-    setsockopt(socket_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
-    util::set_nonblocking(socket_fd);
+    setsockopt(_listen_socket_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
+    util::set_nonblocking(_listen_socket_fd);
     spdlog::debug("Socket created ok");
 
     sockaddr_in addr{};
@@ -112,19 +112,20 @@ public:
     addr.sin_port = htons(port);
     addr.sin_addr.s_addr = INADDR_ANY;
 
-    if (::bind(socket_fd, (sockaddr *)&addr, sizeof(addr)) != 0) {
+    if (::bind(_listen_socket_fd, (sockaddr *)&addr, sizeof(addr)) != 0) {
       throw std::runtime_error(
           fmt::format("bind() failed: {}", strerror(errno)));
     }
 
-    if (::listen(socket_fd, SOMAXCONN) != 0) {
+    if (::listen(_listen_socket_fd, SOMAXCONN) != 0) {
       throw std::runtime_error(
           fmt::format("listen() failed: {}", strerror(errno)));
     }
     spdlog::debug("Bind to port {} ok", port);
 
     _accept_watcher.set<Server, &Server::on_accept>(this);
-    _accept_watcher.start(socket_fd, ev::READ);
+    _accept_watcher.start(_listen_socket_fd, ev::READ);
+    spdlog::info("Server is listening on port port {}", port);
   }
 
   ~Server() {
