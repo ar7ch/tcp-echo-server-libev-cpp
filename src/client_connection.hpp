@@ -35,7 +35,7 @@ public:
   std::pair<std::string, int> get_ip_port() const { return _ip_port; };
 
   void on_read(ev::io &watcher, int revents) {
-    char buffer[BUFFER_SIZE];
+    char buffer[BUFFER_SIZE] = {0};
     ssize_t n_bytes = ::read(_fd, buffer, sizeof(buffer));
     if (n_bytes <= 0) {
       spdlog::info("Client {}:{}: connection reset, closing...", _ip_port.first,
@@ -43,8 +43,8 @@ public:
       _on_disconnect_cb();
       return;
     }
-    spdlog::debug("Client {}:{}: received {} bytes", _ip_port.first,
-                  _ip_port.second, n_bytes);
+    spdlog::debug("Client {}:{}: received {} bytes: \"{}\"", _ip_port.first,
+                  _ip_port.second, n_bytes, buffer);
     ::send(_fd, buffer, n_bytes, 0); // echo back
   }
 };

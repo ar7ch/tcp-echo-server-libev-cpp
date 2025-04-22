@@ -14,7 +14,7 @@ void handle_sigint(ev::sig &sig, int revents) {
 
 int main(int argc, char **argv) {
   CLI::App app{"TCP echo server"};
-  spdlog::set_pattern("[%H:%M:%S.%e][%^%l%$] %v");
+  spdlog::set_pattern("[%Y-%m-%d %H:%M:%S.%e][%^%l%$] %v");
   spdlog::set_level(spdlog::level::info);
 
   int port;
