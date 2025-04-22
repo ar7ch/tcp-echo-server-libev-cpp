@@ -93,7 +93,8 @@ async def interactive_mode(ip: str, port: int) -> None:
     """
     reader, writer = await asyncio.open_connection(ip, port)
     print(f"Connected to {ip}:{port}")
-    print("Input your text...")
+    print("Input your text and press <enter> to send.")
+    print("Press CTRL+D to exit.")
     try:
         input_task = asyncio.create_task(handle_input(writer))
         response_task = asyncio.create_task(handle_response(reader))
